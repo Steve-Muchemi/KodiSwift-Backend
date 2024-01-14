@@ -1,0 +1,21 @@
+//all routes that dont need authenticaton token
+
+const express = require('express');
+const router = express.Router();
+const userController = require('../controllers/userController.js');
+
+router.get('/user', ()=>{console.log('Welcome to our user endpoints')} )
+
+router.post('/user/register', userController.register)
+
+router.post('/user/login', userController.login)
+
+router.post('/user/login', userController.update)
+
+router.post('/user/login', userController.logout)
+
+router.post('/user/login', userController.login)
+
+router.post('/user/login', userController.deleteAccount)
+
+module.exports = router;
