@@ -1,13 +1,13 @@
 const axios = require('axios');
 
 const data = {
-    username: 'some_user',
-    email: 'user2121@gmail.com',
+    
+    username: 'ruto william',
 password: 'anewpassword',
 UserType: 'landlord',
 }
 
-axios.post('http://localhost:3001/api/user/register', data )
+axios.post('http://localhost:3001/api/user/login', data )
 .then(response=>{
     console.log(response.data)
 })

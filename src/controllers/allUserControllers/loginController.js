@@ -1,39 +1,52 @@
 const User = require('../../models/userModel');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const config = require('../../config/config.json')
 
 
 const loginController = async(req, res)=>{
 
     /**
-	 * Improvements needed:
-	 * Sign up with either email or username. Not both but offer either of the two options
-     * compare if stored password is same with the one in the db before creating a jwt token
-     * 
+	 * logins a user with their email or username and password
+	 * 
+   *
+   * 
 	 */
 
 
     try {
-      const { email, password } = req.body;
-      let user = await User.findOne({ email });
+      const { email, username, password } = req.body;
+
+      //user can login with username or email
+      let user = await User.findOne({ email }) || await User.findOne({ username})
+
+      
 
       if (!user) {
-        return res.status(400).json({ message: 'Invalid credentials' });
+        return res.status(401).json({ error: 'Unauthorized', message: 'Invalid credentials' });
+
+      } else{
+
+        //check if passwords match
+        const isMatch = await bcrypt.compare(password, user.password)
+        if(!isMatch){
+          return res.status(401).json({ error: 'Unauthorized', message: 'Invalid credentials' });
+
+        }
       }
 
-           
+         
 
     // Creating an auth session for the user with jwt
       const payload = { 
         user: {
           id: user.id,
-          email: user.email
+          email: user.email 
         },
       };
-      const secret = 'secretkey';
+      const secret = config.secretKey;;
 
       const token = jwt.sign(payload, secret, { expiresIn: '1h' });
-
-      console.log('Generated token: ', token);
 
       res.status(200).json({ 'token': token, 'username': user.username });
     } catch (error) {
