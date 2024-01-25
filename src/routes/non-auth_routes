@@ -3,8 +3,10 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController.js');
+const messageController = require('../controllers/messageController.js')
 
 router.get('/user', ()=>{console.log('Welcome to our user endpoints')} )
+
 
 router.post('/user/register', userController.register)
 
@@ -15,5 +17,10 @@ router.post('/user/update', userController.update)
 router.post('/user/logout', userController.logout)
 
 router.post('/user/delete', userController.deleteAccount)
+
+
+
+router.get('/message', ()=>{console.log('Welcome to message endpoints')})
+router.get('/message/chathistory', messageController.chatHistory)
 
 module.exports = router;

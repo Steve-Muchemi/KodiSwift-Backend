@@ -1,9 +1,16 @@
 
-const chatHistoryController = require('./allUserControllers/chatHistoryController');
+const chatHistoryController = require('./allMessageControllers/chatHistoryController');
+const saveMessage = require('./allMessageControllers/saveMessageController');
 
 
 class messageController{
-    chathistory(req, res){
+
+    saveMessage(req, res){
+        saveMessage(req, res)
+    }
+    
+    chatHistory(req, res){
+   
     chatHistoryController(req, res);
     }
    

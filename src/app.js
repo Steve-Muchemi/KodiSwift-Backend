@@ -1,24 +1,29 @@
 const express = require('express');
 const cors = require('cors'); 
+
 //import { errorResponse, successResponse } from "./utils/libs/response.js";
 
 //importing routes
 const routes = require('./routes/non-auth_routes');
 
+//import socketio
+const initializeSocketIO = require('./socketIO/socketIO');
 
 //creating an express app
 const app = express();
 
+const http = require('http');
+const server = http.createServer(app); //creating a http sever
+
+
+//initialize socketIO with the sever
+initializeSocketIO(server);
 
 //set up middlewares
 app.use(express.json());
 app.use(express.urlencoded({extended: true})); //parse form data
 app.use(cors());
 app.use("/api", routes);
-
-
-
-
 
 
 //index route
