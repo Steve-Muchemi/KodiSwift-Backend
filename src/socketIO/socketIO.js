@@ -3,6 +3,7 @@ const socketIO = require('socket.io');
 
 
 const initializeSocektIO = (server) => {
+  
 const io = socketIO(server, {
         cors: {
             origin: 'http://localhost:3000',
@@ -17,7 +18,6 @@ let users = [];
 let dbMessages = [];
 
 
-    
 io.on('connection', (socket) => {
     //console.log('A user connected', socket.id);
   
@@ -181,6 +181,7 @@ io.on('connection', (socket) => {
      
     
   });  
+  console.log('initializing socket IO...')
   
 }
 

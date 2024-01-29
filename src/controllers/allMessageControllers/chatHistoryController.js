@@ -5,7 +5,7 @@ const ObjectId = mongoose.Types.ObjectId;
 
 const chatHistoryController = async(req, res)=>{
 
-  console.log('gets to historys')
+ 
 // we need the sendersid which is the current userid. and the id of receiver.
 //with that we will load all their messages 
 

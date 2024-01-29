@@ -1,19 +1,18 @@
-const app = require('./app.js');
+// index.js
+
+const { app, server } = require('./app');
 const connectDB = require('./config/db');
 
+const port = process.env.PORT || 3002;
 
-    
-    const port = process.env.port || 3001;
-
-    //connect to our db before running the app
-    connectDB().then(()=>{
-
-   try { app.listen(port, ()=>{
-       console.log( `APi is ready at http://localhost:/${port}`)
-    })
-    
-    } catch(error){
-    console.log("error ==>", error);
+// Connect to the database before running the app
+connectDB().then(() => {
+  try {
+    server.listen(port, () => {
+      console.log(`API is ready at http://localhost:${port}`);
+    });
+  } catch (error) {
+    console.log("Error ==>", error);
     process.exit(1);
-    }
-    })
+  }
+});
