@@ -48,7 +48,7 @@ const loginController = async(req, res)=>{
 
       const token = jwt.sign(payload, secret, { expiresIn: '1h' });
 
-      res.status(200).json({ 'token': token, 'username': user.username });
+      res.status(200).json({ 'token': token, 'username': user.username, 'userid': user._id, 'email' : user.email, 'profilepic': user.profilepic});
     } catch (error) {
       console.error(error.message);
       res.status(500).send('Server Error');

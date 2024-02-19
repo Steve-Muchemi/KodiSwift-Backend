@@ -4,8 +4,27 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController.js');
 const messageController = require('../controllers/messageController.js')
+const propertyController = require('../controllers/allPropertyControllers/postController.js')
 
-router.get('/user', ()=>{console.log('Welcome to our user endpoints')} )
+const User = require('../models/userModel');
+
+router.get('/user/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  console.log(userId)
+  try {
+    const user = await User.findById(userId);
+    if (user) {
+      console.log('User found:', user);
+      res.status(200).json({ user: user });
+    } else {
+      console.log('User not found');
+      res.status(404).json({ message: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error finding user:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 
 router.post('/user/register', userController.register)
@@ -19,8 +38,48 @@ router.post('/user/logout', userController.logout)
 router.post('/user/delete', userController.deleteAccount)
 
 
+// Route for posting a new property
+router.post('/property', propertyController.postProperty);
+
+// Route for updating a property
+router.put('/property/:propertyId', propertyController.updateProperty);
+
+// Route for deleting a property
+router.delete('/property/:propertyId', propertyController.deleteProperty);
+
 
 router.get('/message', ()=>{console.log('Welcome to message endpoints')})
 router.get('/message/chathistory', messageController.chatHistory)
+
+
+/*
+
+// Create a new post
+router.post('/', postController.createPost);
+
+// Get all posts
+router.get('/', postController.getAllPosts);
+
+// Get a single post by ID
+router.get('/:postId', postController.getPostById);
+
+// Update a post by ID
+router.put('/:postId', postController.updatePost);
+
+// Delete a post by ID
+router.delete('/:postId', postController.deletePost);
+
+
+
+
+
+// Create a new comment for a post
+router.post('/:postId/comments', commentController.createComment);
+
+// Get all comments for a post
+router.get('/:postId/comments', commentController.getCommentsByPostId);
+
+
+*/
 
 module.exports = router;

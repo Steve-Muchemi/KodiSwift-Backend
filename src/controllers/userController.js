@@ -6,6 +6,7 @@ const updateController = require('./allUserControllers/updateController');
 const getUsersController = require('./allUserControllers/getusersController');
 
 class UserController {
+    
   
     register(req, res){
         registerController(req, res);
@@ -20,8 +21,11 @@ class UserController {
      }
     
      update(req, res) {
-        updateController(req,res);
+        console.log('called update')
+        updateController(req, res);
      }
+     
+
 
     deleteAccount(req, res) {
       deleteController(req,res);
@@ -30,6 +34,16 @@ class UserController {
     getUsers(req, res){
         getUsersController(req, res)
     }
+
+/*
+     getCoinBalance = async (req, res) => {
+          try {
+            const user = await User.findById(req.user._id);
+            res.json({ coins: user.coins });
+          } catch (err) {
+            res.status(500).json({ error: 'Error fetching user coin balance' });
+          }
+  */  
 }
 
 module.exports = new UserController();

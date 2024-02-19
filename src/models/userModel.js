@@ -19,6 +19,17 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
       },
+      profilepic: {
+        type: String,
+        required: false,
+      }
+      ,
+
+      coins: {
+        type: Number,
+        default: 0, // Initial coin balance
+        required:false,
+      }
 });
 
 const user = mongoose.model('User', userSchema);
