@@ -39,7 +39,7 @@ router.post('/user/delete', userController.deleteAccount)
 
 
 // Route for posting a new property
-router.post('/property', propertyController.postProperty);
+router.post('/property/post', propertyController.postProperty);
 
 // Route for updating a property
 router.put('/property/:propertyId', propertyController.updateProperty);

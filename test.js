@@ -116,7 +116,7 @@ console.log('Updated users:', users);
   
       try {
        
-        await axios.post(`http://localhost:3002/api/user/update`, {
+        await axios.post(`http://localhost:3002/api/property`, {
           userId: '65c00e7bd8fa3c03b2ca870b',
           name: 'newname',
           email: 'dude@gmail.com',
