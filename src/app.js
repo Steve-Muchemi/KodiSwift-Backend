@@ -22,7 +22,9 @@ initializeSocketIO(server);
 // Set up middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Parse form data
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost', 'http://localhost:3000', 'http://localhost:3002']
+}));
 app.use("/api", routes);
 
 // Index route
