@@ -15,9 +15,13 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
       },
+      phone: {
+        type: Number,
+        required: true
+      },
       email: {
         type: String,
-        required: true
+        required: false
       },
       profilepic: {
         type: String,
@@ -29,7 +33,12 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0, // Initial coin balance
         required:false,
-      }
+      },
+
+      coordinates: {
+        type: [Number], 
+        required: false,
+      },
 });
 
 const user = mongoose.model('User', userSchema);

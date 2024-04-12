@@ -1,6 +1,6 @@
 // controllers/coinController.js
 
-const User = require('../models/User');
+const User = require('../models/userModel');
 
 const coinController = {
   // Add coins to user's balance

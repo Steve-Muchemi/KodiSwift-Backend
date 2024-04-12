@@ -1,0 +1,39 @@
+/**
+ * This function analyzes a list of messages to determine the contacts a user has interacted with.
+ * It extracts the IDs of users who have either sent or received messages to/from the specified user.
+ * @param {Array} messages - An array of message objects containing sender and receiver information.
+ * @param {string} user - The ID of the user whose contacts are being analyzed.
+ * @returns {Array} - An array of unique user IDs representing the contacts of the specified user.
+ */
+const contactsHistoryFunction = (messages, user) => {
+    // Initialize an empty array to store unique contact IDs
+    let contacts = [];
+
+    // Loop through each message in the provided array
+    for (let i = 0; i < messages.length; i++) {
+        // Check if the current message was sent by the specified user
+        if (messages[i].sender.toString() === user) {
+            // Check if the receiver ID is not already added to the contacts array
+            const added = contacts.some(contact => contact === messages[i].receiver.toString());
+            if (!added) {
+                // If not added, push the receiver ID to the contacts array
+                contacts.push(messages[i].receiver.toString());
+            }
+        }
+        // Check if the current message was received by the specified user
+        else if (messages[i].receiver.toString() === user) {
+            // Check if the sender ID is not already added to the contacts array
+            const added = contacts.some(contact => contact === messages[i].sender.toString());
+            if (!added) {
+                // If not added, push the sender ID to the contacts array
+                contacts.push(messages[i].sender.toString());
+            }
+        }
+    }
+
+    // Return the array of unique contact IDs
+    return contacts;
+};
+
+// Export the contactsHistoryFunction to make it accessible from other modules
+module.exports = contactsHistoryFunction;

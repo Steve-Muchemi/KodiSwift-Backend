@@ -8,7 +8,7 @@ const http = require('http');
 const routes = require('./routes/non-auth_routes');
 
 // Import Socket.IO setup function
-const initializeSocketIO = require('./socketIO/socketIO');
+const initializeSocketIO = require('./socketIO/socketIO_modular');
 
 // Creating an express app
 const app = express();

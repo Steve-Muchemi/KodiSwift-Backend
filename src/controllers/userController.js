@@ -4,6 +4,7 @@ const logoutController = require('./allUserControllers/logoutController');
 const deleteController = require('./allUserControllers/deleteController');
 const updateController = require('./allUserControllers/updateController');
 const getUsersController = require('./allUserControllers/getusersController');
+const codeGenerator = require('./allUserControllers/codeGenerator');
 
 class UserController {
     
@@ -11,6 +12,10 @@ class UserController {
     register(req, res){
         registerController(req, res);
     }
+
+   sendCode(req, res){ 
+    codeGenerator(req, res);
+  };
 
     login(req, res) {
         loginController(req, res);
@@ -31,10 +36,12 @@ class UserController {
       deleteController(req,res);
      }
    
-    getUsers(req, res){
+     getuserbyid(req, res){
         getUsersController(req, res)
+
     }
 
+   
 /*
      getCoinBalance = async (req, res) => {
           try {

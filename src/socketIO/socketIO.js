@@ -2,7 +2,7 @@ const socketIO = require('socket.io');
 //import db and save messages 
 const DBMessages = require('../models/messageModel')
 const mongoose = require('mongoose');
-const User = require('../models/userModel');
+const DBUsers = require('../models/userModel');
 
 const initializeSocektIO = (server) => {
   
@@ -23,112 +23,133 @@ let dbMessages = [];
 
 io.on('connect', (socket) => {
  
-    //console.log('A user connected', socket.id);
-      
+    
     //recieving messages from all sockets
-    socket.on('message', (data) => {
-      //console.log('Received message:', data);
-      io.emit('message', data);
-    });
+socket.on('message', (data) => {io.emit('message', data);});
+  
+
+
+  
   
     //when a user disconnects
-    socket.on('disconnect', () => {
+socket.on('disconnect', () => {
       console.log('A user disconnected');
       users = users.filter(user => user.socket.id !== socket.id)
-
-      //console.log("All online users currently ", users)
-      
-  //will need to remove the disconnected user from our list of online users
-  
-      //console.log('current list of online users after disconnect', users)
-
-
-
     });
-  
-  
-  
+    
+    
+
+
+
     //if a user logs in or changes userid 
-    socket.on('user login', (userobj) => {    
-      console.log('login socket triggered, user obj', userobj)
+  socket.on('user login', (userobj) => {    
+    
+    console.log('login socket triggered, user obj', userobj)
+
     const objexists = users.some(user => user.userobj.userid === userobj.userid)
   //if a userobj does not exists in online users push it
       if(!objexists){
          users.push({ socket, userobj }); 
       } else{
-        //remove the object then push it to ensure the socket info is updated
-        //console.log('userlist before update', users, 'to update with socket', socket.id)
         users = users.map(user=>{
-          if (user.userobj.userid === userobj.userid ){
-              user.socket = socket;
-              //console.log('user list updated', users)   
-          }
-      
-        return user;
-        
-        })
+          if (user.userobj.userid === userobj.userid ){user.socket = socket;}
+          return user; })
       }
   
      io.emit('online users', users.map((user) => user.userobj));
-     //console.log('current list of online users sent', users)
 
-      const senderid = userobj.userid
-      try{
-        
+      const senderid = userobj.userid;
+      try{       
 
-     DBMessages.find({
-      $or: [
-        { receiver: senderid },
-        { sender: senderid }
-      ]
-    })
+     DBMessages.find({$or: [{ receiver: senderid },{ sender: senderid }]})
   .then((messages) => {
-    console.log('Messages found:', messages);
-
     socket.emit('chatHistory', messages)
+    
+  
+  //uses messages to check contacts a user has been messaging or recieved messages from and returns their ids
+  const contactsHistoryFunction = (messages, user) => {
+    let contacts = [];
+
+  for (let a = 0; a < messages.length; a++) {
+    if (messages[a].sender.toString() === user) {
+      const added = contacts.some(contact => contact === messages[a].receiver.toString());
+      if (!added) {
+        contacts.push(messages[a].receiver.toString());
+      }
+    } else if (messages[a].receiver.toString() === user) {
+      const added = contacts.some(contact => contact === messages[a].sender.toString());
+      if (!added) {
+        contacts.push(messages[a].sender.toString());
+      }
+    }
+  }
+
+  return contacts;
+};
+
+
+const contactsHistoryId = contactsHistoryFunction(messages, userobj.userid);
+
+const fetchContactFromDB = (contactId) => {
+   DBUsers.find({ _id: contactId }).then(contacts => {
+    socket.emit('contactsHistory', contacts )
+    console.log('Contacts history fetched:', contacts); 
+    
+  });
+};
+
+// Map each contact ID to a DB query and collect the promises
+const contactsHistoryPromises = contactsHistoryId.map(contactId => fetchContactFromDB(contactId));
+
+// Use Promise.all to wait for all promises to resolve
+Promise.all(contactsHistoryPromises)
+  .then(contactsHistory => {
+  // for every message associated with current user. 
+  })
+  .catch(error => {
+    console.error('Error fetching contacts history:', error);
+  });
   })
   .catch((error) => {
     console.error('Error finding messages:', error);
   });   
-      } catch (error){
-        console.log(error)
-      }
+} catch (error){
+console.log(error)
+}
      
-    });
-   
+});
    
 
-    socket.on('logout', (userid) => {
+
+
+
+socket.on('logout', (userid) => {
       
 users = users.filter(user => user.userobj.userid !==userid)
-
-
       console.log('user logged out' , userid);
       console.log("All online users currently ", users)
     });
-  
-   // 
-    
-   //console.log('current users', users);
-  
-    socket.on('private message', ({ reciever, content, sender, status, messageid}) => {
-  
-      //To do: save the message to db
+
+
+
+
+
+socket.on('search user', (usertosearch)=>{
+      DBUsers.find({_id:usertosearch}).then(user => {
+        console.log('users matching search', user)
+        socket.emit('users matching search', user)})
+      })
+
+     
+
+
+
+socket.on('private message', ({ reciever, content, sender, status, messageid}) => {
      const privatemessage = { reciever, content, sender, status, messageid}
-  
      dbMessages.push(privatemessage);
-
-     /**
-      * Save to mongodb
-      * 
-      */
-
      const senderid = new mongoose.Types.ObjectId(sender);
     const receiverid = new mongoose.Types.ObjectId(reciever);
-
-     // const  objtosave= { receiver: reciever.userid, content: message, sender: sender, status, messageid}
-    //console.log('message obj ', objtosave)
-      try {
+     try {
         //spelling issues - reciever
         let newDBMessage = DBMessages ({ receiver: receiverid , content, sender:senderid, status, messageid})
         newDBMessage.save()
@@ -164,36 +185,20 @@ users = users.filter(user => user.userobj.userid !==userid)
       }
       
     });
+
+
+
+
+
   
-  // when the sent message is recieved we get a confirmation
-  socket.on('A new Message recieved', async (newReceivedMessage)=>{
+ 
+socket.on('A new Message recieved', async (newReceivedMessage)=>{
   
-    //update the status of newRecievedMessage and save it to db.
-    /*
-     newReceivedMessage = {
-      sender,
-      reciever,
-      message,
-      timestamp: new Date().toLocaleTimeString(),
-      messageid,
-      status : {
-        recieved: true,
-        read: false
-      }
-    };
-    */
-  // Update the recieved status to true
-  //console.log("new recieved message", newReceivedMessage);
   try {
     await DBMessages.updateOne({messageid: newReceivedMessage.messageid}, {$set: {status: {received: true, read:false }}});
     
-
-  //console.log('new updatedmessage', updateMessage)
-
   }catch(error){console.log(error)}
   
-
-
   dbMessages = dbMessages.map( message =>{
   if(message.messageid === newReceivedMessage.messageid){
     
@@ -202,10 +207,6 @@ users = users.filter(user => user.userobj.userid !==userid)
   return message;
   })
   
-  //console.log("received messages, db messages", dbMessages)
-  
-    //notify the sender their message was recieved.
-  
     const senderUser = users.find((user) => user.userobj.userid === newReceivedMessage.sender);
     const senderSocket = senderUser.socket
     
@@ -213,6 +214,10 @@ users = users.filter(user => user.userobj.userid !==userid)
   
   })
   
+
+
+
+
   // we get a notification that the user read a particular message
   socket.on('We read your message', async(readmessageobj)=>{
   //To do update the db that the message was read.
@@ -260,9 +265,12 @@ users = users.filter(user => user.userobj.userid !==userid)
   senderSocket.emit('Your message was read', readmessageobj);
   })
      
+
     
   });  
-  console.log('initializing socket IO...')
+
+
+console.log('initializing socket IO...')
   
 }
 
