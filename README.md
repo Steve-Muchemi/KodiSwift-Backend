@@ -34,7 +34,8 @@ This backend API provides comprehensive CRUD operations, authentication features
 
 markdown
 Copy code
-### 2. Install dependencies
+### 
+2. Install dependencies
    ```bash
    npm install
 Set up environment variables
@@ -49,35 +50,44 @@ SOCKET_PORT=3001
 Start the server
 
      Copy code
-```bash 
-   npm start
+      ```bash 
+         npm start
 
-markdown
-API Endpoints
-User Routes
-POST /user/register - Register a new user
-POST /user/login - Login a user
-POST /user/logout - Logout a user
-POST /user/update - Update user information
-POST /user/delete - Delete a user account
-GET /user/:userId - Get user by ID
-Listing Routes
-GET /listing - Get all listings
-POST /listing - Create a new listing
-GET /listing/:id - Get a listing by ID
-PUT /listing/:id - Update a listing
-DELETE /listing/:id - Delete a listing
-Real-Time Communication Routes
-GET /socket/connect - Connect to Socket.IO for real-time communication
-POST /socket/message - Send a message via Socket.IO
-WhatsApp Integration Routes
-POST /whatsapp/send - Send a message via WhatsApp
+Routes
+router.post('/user/register', userController.register);
+router.get('/user/sendcode', userController.sendCode);
+router.post('/user/login', userController.login);
+router.post('/user/update', userController.update);
+router.post('/user/logout', userController.logout);
+router.post('/user/delete', userController.deleteAccount);
+router.get('/user/getuserbyid/:id', userController.getuserbyid);
+
+router.get('/property/get/all', getController.getall);
+router.post('/property/post', upload.any(), propertyController.postProperty);
+router.put('/property/:propertyId', propertyController.updateProperty);
+router.delete('/property/:propertyId', propertyController.deleteProperty);
+router.get('/property/images', propertyController.propertyimages);
+
+router.post('/connect/createpost', ConnectPost.createPost);
+router.get('/connect/getallposts', ConnectPost.getAllPosts);
+router.get('/connect/getpost/:postId', ConnectPost.getPostById);
+router.put('/connect/updatepost/:postId', ConnectPost.updatePost);
+router.delete('/connect/deletepost/:postId', ConnectPost.deletePost);
+
+router.post('/connect/comment', CommentController.createComment);
+router.get('/connect/getcomments/:postId', CommentController.getCommentsByPostId);
+router.put('/connect/updatecomment/:commentId', CommentController.updateCommentById);
+router.delete('/connect/deletecomment/:commentId', CommentController.deleteCommentById);
+
+
 WebSocket Setup
 The server runs a separate Socket.IO instance on a different port. Make sure to configure your frontend to connect to this port for real-time updates.
 
-markdown
-Contributing
-We welcome contributions! Please read our Contributing Guidelines for more information.
+### 3.Contributing
+We welcome contributions!
 
-License
+### 4.Contact
+Please contact info@kodiswift.com for more information.
+
+ ### 5.License
 This project is licensed under the MIT License. See the LICENSE file for details.
