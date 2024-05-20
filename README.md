@@ -46,14 +46,13 @@ PORT=3000
 MONGODB_URI=mongodb://localhost:27017/kodiswift
 JWT_SECRET=your_jwt_secret
 SOCKET_PORT=3001
-TWILIO_ACCOUNT_SID=your_twilio_account_sid
-TWILIO_AUTH_TOKEN=your_twilio_auth_token
-TWILIO_WHATSAPP_FROM=whatsapp:+1234567890
 Start the server
 
-bash
-Copy code
-npm start
+     Copy code
+```bash 
+   npm start
+
+markdown
 API Endpoints
 User Routes
 POST /user/register - Register a new user
@@ -76,6 +75,7 @@ POST /whatsapp/send - Send a message via WhatsApp
 WebSocket Setup
 The server runs a separate Socket.IO instance on a different port. Make sure to configure your frontend to connect to this port for real-time updates.
 
+markdown
 Contributing
 We welcome contributions! Please read our Contributing Guidelines for more information.
 
