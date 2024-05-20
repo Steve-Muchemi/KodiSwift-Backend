@@ -53,41 +53,62 @@ Start the server
       ```bash 
          npm start
 
-Routes
-router.post('/user/register', userController.register);
-router.get('/user/sendcode', userController.sendCode);
-router.post('/user/login', userController.login);
-router.post('/user/update', userController.update);
-router.post('/user/logout', userController.logout);
-router.post('/user/delete', userController.deleteAccount);
-router.get('/user/getuserbyid/:id', userController.getuserbyid);
 
-router.get('/property/get/all', getController.getall);
-router.post('/property/post', upload.any(), propertyController.postProperty);
-router.put('/property/:propertyId', propertyController.updateProperty);
-router.delete('/property/:propertyId', propertyController.deleteProperty);
-router.get('/property/images', propertyController.propertyimages);
+Set up environment variables
+Create a .env file in the root directory and add the following:
 
-router.post('/connect/createpost', ConnectPost.createPost);
-router.get('/connect/getallposts', ConnectPost.getAllPosts);
-router.get('/connect/getpost/:postId', ConnectPost.getPostById);
-router.put('/connect/updatepost/:postId', ConnectPost.updatePost);
-router.delete('/connect/deletepost/:postId', ConnectPost.deletePost);
+env
+Copy code
+```bash
+   PORT=3000
+   MONGODB_URI=mongodb://localhost:27017/kodiswift
+   JWT_SECRET=your_jwt_secret
+   SOCKET_PORT=3001
 
-router.post('/connect/comment', CommentController.createComment);
-router.get('/connect/getcomments/:postId', CommentController.getCommentsByPostId);
-router.put('/connect/updatecomment/:commentId', CommentController.updateCommentById);
-router.delete('/connect/deletecomment/:commentId', CommentController.deleteCommentById);
+Start the server
+
+```bash
+   Copy code
+   npm start
+
+API Endpoints
+User Routes
+User Routes
+POST /user/register - Register a new user
+POST /user/login - Login a user
+POST /user/logout - Logout a user
+POST /user/update - Update user information
+POST /user/delete - Delete a user account
+GET /user/:userId - Get user by ID
+GET /user/sendcode - Send a code to the user
+
+Listing Routes
+GET /property/get/all - Get all properties
+POST /property/post - Create a new property (with file upload)
+PUT /property/:propertyId - Update a property
+DELETE /property/:propertyId - Delete a property
+GET /property/images - Get property images
+
+Connect Routes
+POST /connect/createpost - Create a new post
+GET /connect/getallposts - Get all posts
+GET /connect/getpost/:postId - Get a post by ID
+PUT /connect/updatepost/:postId - Update a post
+DELETE /connect/deletepost/:postId - Delete a post
+POST /connect/comment - Create a new comment
+GET /connect/getcomments/:postId - Get comments by post ID
+PUT /connect/updatecomment/:commentId - Update a comment
+DELETE /connect/deletecomment/:commentId - Delete a comment
 
 
 WebSocket Setup
 The server runs a separate Socket.IO instance on a different port. Make sure to configure your frontend to connect to this port for real-time updates.
 
-### 3.Contributing
+### Contributing
 We welcome contributions!
 
-### 4.Contact
+### Contact
 Please contact info@kodiswift.com for more information.
 
- ### 5.License
+ ### License
 This project is licensed under the MIT License. See the LICENSE file for details.
