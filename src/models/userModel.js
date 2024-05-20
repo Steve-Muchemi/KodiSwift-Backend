@@ -15,9 +15,29 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
       },
+      phone: {
+        type: Number,
+        required: true
+      },
       email: {
         type: String,
-        required: true
+        required: false
+      },
+      profilepic: {
+        type: String,
+        required: false,
+      }
+      ,
+
+      coins: {
+        type: Number,
+        default: 0, // Initial coin balance
+        required:false,
+      },
+
+      coordinates: {
+        type: [Number], 
+        required: false,
       },
 });
 

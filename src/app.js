@@ -1,44 +1,40 @@
+// app.js
+
 const express = require('express');
-const cors = require('cors'); 
+const cors = require('cors');
+const http = require('http');
 
-//import { errorResponse, successResponse } from "./utils/libs/response.js";
-
-//importing routes
+// Importing routes
 const routes = require('./routes/non-auth_routes');
 
-//import socketio
-const initializeSocketIO = require('./socketIO/socketIO');
+// Import Socket.IO setup function
+const initializeSocketIO = require('./socketIO/socketIO_modular');
 
-//creating an express app
+// Creating an express app
 const app = express();
 
-const http = require('http');
-const server = http.createServer(app); //creating a http sever
+// Creating an HTTP server using the express app
+const server = http.createServer(app);
 
-
-//initialize socketIO with the sever
+// Initialize Socket.IO with the server
 initializeSocketIO(server);
 
-//set up middlewares
+// Set up middlewares
 app.use(express.json());
-app.use(express.urlencoded({extended: true})); //parse form data
-app.use(cors());
+app.use(express.urlencoded({ extended: true })); // Parse form data
+app.use(cors({
+  origin: ['http://localhost', 'http://localhost:3000', 'http://localhost:3002']
+}));
 app.use("/api", routes);
 
-
-//index route
+// Index route
 app.get("/", (req, res) => {
-    //console.log('welcome')
-    res.status(200).json({'message':"Welcome to Kodip backend 🚀"})
-})
+  res.status(200).json({ 'message': "Welcome to Kodip backend 🚀" });
+});
 
-//Error Handling
-// handle 404 routes
+// Error Handling
+// Handle 404 routes
 
-// handle global errors
+// Handle global errors
 
-
-
-//connect to db then run our app
-
-module.exports = app;
+module.exports = { app, server };

@@ -1,26 +1,58 @@
-//all routes that dont need authenticaton token
-
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const upload = multer();
+const User = require('../models/userModel');
 const userController = require('../controllers/userController.js');
-const messageController = require('../controllers/messageController.js')
+const propertyController = require('../controllers/allPropertyControllers/postController.js');
+const getController = require('../controllers/allPropertyControllers/getController.js');
+const ConnectPost = require('../controllers/connectPostController.js');
+const CommentController = require('../controllers/CommentController.js');
 
-router.get('/user', ()=>{console.log('Welcome to our user endpoints')} )
+router.get('/user/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    const user = await User.findById(userId);
+    if (user) {
+      console.log('User found:', user);
+      res.status(200).json({ user: user });
+    } else {
+      console.log('User not found');
+      res.status(404).json({ message: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error finding user:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
+router.post('/user/register', userController.register);
+router.get('/user/sendcode', userController.sendCode);
+router.post('/user/login', userController.login);
+router.post('/user/update', userController.update);
+router.post('/user/logout', userController.logout);
+router.post('/user/delete', userController.deleteAccount);
+router.get('/user/getuserbyid/:id', userController.getuserbyid);
 
-router.post('/user/register', userController.register)
+router.get('/property/get/all', getController.getall);
+router.post('/property/post', upload.any(), propertyController.postProperty);
+router.put('/property/:propertyId', propertyController.updateProperty);
+router.delete('/property/:propertyId', propertyController.deleteProperty);
+router.get('/property/images', propertyController.propertyimages);
 
-router.post('/user/login', userController.login)
+router.get('/message', () => {
+  console.log('Welcome to message endpoints');
+});
 
-router.post('/user/update', userController.update)
+router.post('/connect/createpost', ConnectPost.createPost);
+router.get('/connect/getallposts', ConnectPost.getAllPosts);
+router.get('/connect/getpost/:postId', ConnectPost.getPostById);
+router.put('/connect/updatepost/:postId', ConnectPost.updatePost);
+router.delete('/connect/deletepost/:postId', ConnectPost.deletePost);
 
-router.post('/user/logout', userController.logout)
-
-router.post('/user/delete', userController.deleteAccount)
-
-
-
-router.get('/message', ()=>{console.log('Welcome to message endpoints')})
-router.get('/message/chathistory', messageController.chatHistory)
+router.post('/connect/comment', CommentController.createComment);
+router.get('/connect/getcomments/:postId', CommentController.getCommentsByPostId);
+router.put('/connect/updatecomment/:commentId', CommentController.updateCommentById);
+router.delete('/connect/deletecomment/:commentId', CommentController.deleteCommentById);
 
 module.exports = router;

@@ -26,13 +26,13 @@ const baseModelSchema = new mongoose.Schema({
   contactInfo: [{
     type: String
   }],
-  imageUrls: [String],
+  images:[{type: String}],
   
   pushpin: {
+    
     location: [Number, Number], // Latitude and longitude
     infoboxOption: {
-      title: String,
-      description: String,
+      title: String,      
       propertyType: String,
     },
 
