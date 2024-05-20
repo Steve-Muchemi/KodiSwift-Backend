@@ -17,13 +17,14 @@ This backend API provides comprehensive CRUD operations, authentication features
 - Mongoose
 - Socket.IO
 - Multer
-- WhatsApp integration
+- WhatsApp API
 
 ## Installation
 
 ### Prerequisites
-- Node.js (v14 or later)
+- Node.js (v18 or later)
 - MongoDB
+- Meta developers account for WhatsApp API
 
 ### Setup
 1. Clone the repository
