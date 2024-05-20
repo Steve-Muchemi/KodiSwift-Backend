@@ -74,31 +74,31 @@ Start the server
 ### API Endpoints
 
 ### User Routes
-POST /user/register - Register a new user
-POST /user/login - Login a user
-POST /user/logout - Logout a user
-POST /user/update - Update user information
-POST /user/delete - Delete a user account
-GET /user/:userId - Get user by ID
-GET /user/sendcode - Send a code to the user
+- POST /user/register - Register a new user
+- POST /user/login - Login a user
+- POST /user/logout - Logout a user
+- POST /user/update - Update user information
+- POST /user/delete - Delete a user account
+- GET /user/:userId - Get user by ID
+- GET /user/sendcode - Send a code to the user
 
 ### Listing Routes
-GET /property/get/all - Get all properties
-POST /property/post - Create a new property (with file upload)
-PUT /property/:propertyId - Update a property
-DELETE /property/:propertyId - Delete a property
-GET /property/images - Get property images
+- GET /property/get/all - Get all properties
+- POST /property/post - Create a new property (with file upload)
+- PUT /property/:propertyId - Update a property
+- DELETE /property/:propertyId - Delete a property
+- GET /property/images - Get property images
 
 ### Connect Routes
-POST /connect/createpost - Create a new post
-GET /connect/getallposts - Get all posts
-GET /connect/getpost/:postId - Get a post by ID
-PUT /connect/updatepost/:postId - Update a post
-DELETE /connect/deletepost/:postId - Delete a post
-POST /connect/comment - Create a new comment
-GET /connect/getcomments/:postId - Get comments by post ID
-PUT /connect/updatecomment/:commentId - Update a comment
-DELETE /connect/deletecomment/:commentId - Delete a comment
+- POST /connect/createpost - Create a new post
+- GET /connect/getallposts - Get all posts
+- GET /connect/getpost/:postId - Get a post by ID
+- PUT /connect/updatepost/:postId - Update a post
+- DELETE /connect/deletepost/:postId - Delete a post
+- POST /connect/comment - Create a new comment
+- GET /connect/getcomments/:postId - Get comments by post ID
+- PUT /connect/updatecomment/:commentId - Update a comment
+- DELETE /connect/deletecomment/:commentId - Delete a comment
 
 
 
