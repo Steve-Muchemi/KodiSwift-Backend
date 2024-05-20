@@ -34,20 +34,20 @@ This backend API provides comprehensive CRUD operations, authentication features
 
 markdown
 Copy code
-### 
+
 2. Install dependencies
    ```bash
    npm install
 Set up environment variables
 Create a .env file in the root directory and add the following:
 
-env
-Copy code
-PORT=3000
-MONGODB_URI=mongodb://localhost:27017/kodiswift
-JWT_SECRET=your_jwt_secret
-SOCKET_PORT=3001
-Start the server
+   env
+   Copy code
+   PORT=3000
+   MONGODB_URI=mongodb://localhost:27017/kodiswift
+   JWT_SECRET=your_jwt_secret
+   SOCKET_PORT=3001
+   Start the server
 
      Copy code
       ```bash 
@@ -57,23 +57,23 @@ Start the server
 Set up environment variables
 Create a .env file in the root directory and add the following:
 
-env
-Copy code
-```bash
-   PORT=3000
-   MONGODB_URI=mongodb://localhost:27017/kodiswift
-   JWT_SECRET=your_jwt_secret
-   SOCKET_PORT=3001
+      env
+      Copy code
+      ```bash
+         PORT=3000
+         MONGODB_URI=mongodb://localhost:27017/kodiswift
+         JWT_SECRET=your_jwt_secret
+         SOCKET_PORT=3001
 
 Start the server
 
-```bash
-   Copy code
-   npm start
+      ```bash
+         Copy code
+         npm start
 
-API Endpoints
-User Routes
-User Routes
+### API Endpoints
+
+### User Routes
 POST /user/register - Register a new user
 POST /user/login - Login a user
 POST /user/logout - Logout a user
@@ -82,14 +82,14 @@ POST /user/delete - Delete a user account
 GET /user/:userId - Get user by ID
 GET /user/sendcode - Send a code to the user
 
-Listing Routes
+### Listing Routes
 GET /property/get/all - Get all properties
 POST /property/post - Create a new property (with file upload)
 PUT /property/:propertyId - Update a property
 DELETE /property/:propertyId - Delete a property
 GET /property/images - Get property images
 
-Connect Routes
+### Connect Routes
 POST /connect/createpost - Create a new post
 GET /connect/getallposts - Get all posts
 GET /connect/getpost/:postId - Get a post by ID
@@ -101,8 +101,6 @@ PUT /connect/updatecomment/:commentId - Update a comment
 DELETE /connect/deletecomment/:commentId - Delete a comment
 
 
-WebSocket Setup
-The server runs a separate Socket.IO instance on a different port. Make sure to configure your frontend to connect to this port for real-time updates.
 
 ### Contributing
 We welcome contributions!
