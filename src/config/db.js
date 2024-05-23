@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 const config = require('./config.json')
+const mongoURI = config.mongoURI
 
 const connectDB = async()=>{
 try{
-await mongoose.connect(config.mongoURI);
+await mongoose.connect(mongoURI);
 console.log('Connected to MongoDB');
 } catch(error){
 console.error('MongoDB connection error:', error);

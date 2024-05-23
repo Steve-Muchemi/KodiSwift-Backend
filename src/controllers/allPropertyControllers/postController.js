@@ -3,6 +3,8 @@ const  Property = require('../../models/basemodel');
 const path = require('path');
 const fs = require('fs');
 const { Readable } = require('stream');
+const config = require('../../config/config.json');
+const AWsCredentials = config.AWSCredentials;
 
 const AWS = require('aws-sdk');
 
@@ -37,21 +39,10 @@ for(let i= 0; i < pushpin.length; i++){
         const s3 = new AWS.S3();
 
         // Configure AWS credentials
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 339728b (added property controllers)
         AWS.config.update({
-            accessKeyId: '',
-            secretAccessKey: ''
+            accessKeyId: AWsCredentials.accessKeyId,
+            secretAccessKey: AWsCredentials.secretAccessKey,
         });
-<<<<<<< HEAD
-=======
-        
->>>>>>> d2208a7 (overall major improvements on socketio, property & connect modules)
-=======
-
->>>>>>> 339728b (added property controllers)
 
 
     const uploadFilesWithRetry = async (bucket, key, imageBuffer, contentType,) =>{
