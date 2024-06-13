@@ -4,28 +4,39 @@ const jwt = require('jsonwebtoken');
 const config = require('../../config/config.json');
 const { generateProfilePicture } = require('./generateProfilePicture');
 const AWS = require('aws-sdk');
+const { registerSchema } = require('../../Validators/register.Validator');
+
+const handleErrors = ((error) => {
+    const Error = {};
+
+    if(error.errorResponse.code == 11000 && error.errorResponse.keyValue.email) {
+        return Error.email = "That email is already registered"
+    };
+
+    if(error.errorResponse.code == 11000 && error.errorResponse.keyValue.phone){
+        return Error.phone = "That phone number is already registered"
+    };
+    if(error.errorResponse.code == 11000 && error.errorResponse.keyValue.username){
+        return Error.username = "That username is already registered"
+    };
+    
+})
 
 const RegisterController = async (req, res) => {
     try {
         const { name, username, password, email, phone } = req.body;
-        console.log(name, username, password, email, phone, 'data being passed')
 
-        // Confirm all the variables have been passed
-        if (!name || !password || !username || !phone) {
-            return res.status(400).json({ error: 'User registration failed', message: 'Please enter all your details' });
-        }
+        // Validate the request body
+        const  { error } = registerSchema.validate(req.body);
 
-        // Checking first if the user is registered
-        async function checkUserExists(mail) {
-            const user = await User.findOne({ email: mail });
-
-            if (user) {
-                throw new Error('User already exists, kindly login');
-            }
+        if(error) {
+            return res.status(202).json({
+                "error": error.details[0].message
+            });
         }
 
         try {
-            await checkUserExists(email);
+            // await checkUserExists(email);
         } catch (error) {
             return res.status(400).json({ error: 'User registration failed', message: 'User already exists, Kindly login' });
         }
@@ -62,27 +73,13 @@ const RegisterController = async (req, res) => {
         // Save the new user to the database
         await newUser.save();
 
-        // Creating an auth session for the user with jwt immediately after registration
-        const payload = {
-            user: {
-                id: newUser.id,
-                email: newUser.email,
-            },
-        };
-        const secret = config.secretKey;
-
-        const token = jwt.sign(payload, secret, { expiresIn: '1h' });
-
-        const user = {
-            token,
-            id: newUser.id,
-            email: newUser.email,
-        }
-
-        res.status(201).json({ message: 'User registered successfully', user });
+        res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {
-        console.error(error.message);
-        res.status(500).json({ error: 'User registration failed', message: 'Internal error' });
+        const Error = handleErrors(error);
+
+        return res.status(500).json({error: Error})
+        // console.log(error.errorResponse.code);
+        // res.status(500).json({ error: 'User registration failed', message: 'Internal error' });
     }
 };
 
